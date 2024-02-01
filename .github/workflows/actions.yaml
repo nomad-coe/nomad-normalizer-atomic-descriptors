@@ -1,0 +1,30 @@
+name: install-and-test-workflow
+on: [push]
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install .[dev,tests]
+        # TODO add it to dependencies
+        pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
+        pip install mace-torch
+    - name: mypy
+      run: |
+        python -m mypy --ignore-missing-imports --follow-imports=silent --no-strict-optional atomicdescriptorsnormalizer tests
+    - name: Test with pytest
+      if: success() || failure()
+      run: |
+        python -m pytest -sv tests
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: chartboost/ruff-action@v1
