@@ -13,6 +13,10 @@ dependencies = [
     'quippy-ase==0.9.14',
     "nomad-lab[infrastructure]@git+https://github.com/nomad-coe/nomad.git@develop",
     "nomad-schema-plugin-run@git+https://github.com/nomad-coe/nomad-schema-plugin-run.git@develop",
+    "torch==2.0.1@https://download.pytorch.org/whl/cu118",
+    "torchvision==0.15.2@https://download.pytorch.org/whl/cu118",
+    "torchaudio==2.0.2@https://download.pytorch.org/whl/cu118",
+    "mace-torch",
 ]
 
 [project.urls]
