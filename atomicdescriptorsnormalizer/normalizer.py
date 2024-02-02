@@ -18,8 +18,6 @@
 
 import numpy as np
 
-# from mace.calculators import mace_mp
-from ase.io import read, write
 from ase import Atoms
 from ase.neighborlist import neighbor_list as NL
 from runschema.system import Descriptors, SOAP, MACE
@@ -96,7 +94,6 @@ class AtomicDescriptorNormalizer(SystemBasedNormalizer):
 
         # load the calculator once only.
         if not hasattr(self, "mace_calculator"):
-            print("jpd47 loading the mace calculator")
             self.mace_calculator = mace_mp(default_dtype="float64", dispersion=False)
 
         mace = MACE()
@@ -123,7 +120,7 @@ def transform_struc(struc, r_nn_targ=1.54):
         for i, d in zip(i_list, ds):
             if min_ds[i] is None or d < min_ds[i]:
                 min_ds[i] = d
-        if not None in min_ds:
+        if None not in min_ds:
             break
 
     # compute the scale factor for the structure.
