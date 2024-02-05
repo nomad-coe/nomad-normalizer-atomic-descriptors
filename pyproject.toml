@@ -13,7 +13,7 @@ dependencies = [
     'quippy-ase==0.9.14',
     "nomad-lab[infrastructure]@git+https://github.com/nomad-coe/nomad.git@develop",
     "nomad-schema-plugin-run@git+https://github.com/nomad-coe/nomad-schema-plugin-run.git@develop",
-    'ase~=3.22.1',
+    'ase',
     'torch==2.0.1',
     'torchvision==0.15.2',
     'torchaudio==2.0.2',
