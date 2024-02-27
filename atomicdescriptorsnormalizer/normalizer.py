@@ -51,7 +51,14 @@ class AtomicDescriptorNormalizer(SystemBasedNormalizer):
         # 1. scales the structure so that the average nearest neighbour distance matches diamond
         # 2. replaces all atoms with carbon so that descriptor is element agnostic
         # combination of 1. and 2. makes descriptors purely "structural"
-        transformed_atoms = transform_struc(atoms)
+        try:
+            transformed_atoms = transform_struc(atoms)
+        except Exception as e:
+            self.logger.warning(
+                "failed to transform structure to compute atomic descriptors",
+                exc_info=e,
+            )
+            return
 
         # setup params to be used by quippy
         # TODO decide whether to really store all of these OR to just include this in the descriptor of the SOAP descriptors itself...
@@ -81,27 +88,27 @@ class AtomicDescriptorNormalizer(SystemBasedNormalizer):
             system.descriptors = Descriptors()
         system.descriptors.soap = soap
 
-        # now MACE
+        # We tried mace, but it's not working reliably for now cause a lot of segfaults
+        # If you want to enable this, you need to add mace-torch to the required packages.
+        # try:
+        #     from mace.calculators import mace_mp
+        # except ImportError:
+        #     mace_mp = None
 
-        try:
-            from mace.calculators import mace_mp
-        except ImportError:
-            mace_mp = None
+        # if not mace_mp:
+        #     self.logger.warning("Can't import MACE foundation model.")
+        #     return False
 
-        if not mace_mp:
-            self.logger.warning("Can't import MACE foundation model.")
-            return False
+        # # load the calculator once only.
+        # if not hasattr(self, "mace_calculator"):
+        #     self.mace_calculator = mace_mp(default_dtype="float64", dispersion=False)
 
-        # load the calculator once only.
-        if not hasattr(self, "mace_calculator"):
-            self.mace_calculator = mace_mp(default_dtype="float64", dispersion=False)
-
-        mace = MACE()
-        mace_descriptors = self.mace_calculator.get_descriptors(atoms)
-        mace.system_descriptor = np.mean(mace_descriptors, axis=0)
-        if not system.descriptors:
-            system.descriptors = Descriptors()
-        system.descriptors.mace = mace
+        # mace = MACE()
+        # mace_descriptors = self.mace_calculator.get_descriptors(atoms)
+        # mace.system_descriptor = np.mean(mace_descriptors, axis=0)
+        # if not system.descriptors:
+        #     system.descriptors = Descriptors()
+        # system.descriptors.mace = mace
 
         return True
 

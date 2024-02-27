@@ -2,5 +2,5 @@ plugin_type: normalizer
 name: atomicdescriptorsnormalizer
 description: |
  This is the normalizer for atomic descriptors in NOMAD.
-normalizer_class_name: atomicdescriptorsnormalizer.SoapNormalizer
-plugin_source_code_url=None: https://github.com/nomad-coe/nomad-normalizer-plugin-atomic-descriptors.git
+normalizer_class_name: atomicdescriptorsnormalizer.AtomicDescriptorNormalizer
+plugin_source_code_url: https://github.com/nomad-coe/nomad-normalizer-plugin-atomic-descriptors.git
